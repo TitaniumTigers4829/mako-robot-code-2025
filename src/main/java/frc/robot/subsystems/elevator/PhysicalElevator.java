@@ -181,6 +181,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void openLoop(double output) {
     leaderMotor.setControl(dutyCyleOut.withOutput(output));
+    followerMotor.setControl(dutyCyleOut.withOutput(-output));
   }
 
   @Override
