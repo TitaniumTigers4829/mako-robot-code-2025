@@ -46,7 +46,11 @@ public class CoralIntakeSubsystem extends SubsystemBase {
    * @return true if the intake contains a coral game piece.
    */
   public boolean hasCoral() {
-    return coralIntakeInputs.hasCoral;
+    return coralIntakeInputs.hasCoral || checkHasCoralWhenSensorCooked();
+  }
+
+  public boolean checkHasCoralWhenSensorCooked() {
+    return coralIntakeInputs.intakeStatorCurrentAmps > CoralIntakeConstants.THRESHOLD_VALUE;
   }
 
   public void intakeCoral() {
