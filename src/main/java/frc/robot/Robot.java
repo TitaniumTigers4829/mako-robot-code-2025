@@ -217,6 +217,12 @@ public class Robot extends LoggedRobot {
         .onTrue(
             new InstantCommand(
                 () -> swerveDrive.resetEstimatedPose(visionSubsystem.getLastSeenPose())));
+
+    driverController.leftTrigger()
+        .whileTrue(
+            new InstantCommand(() -> swerveDrive.resetEstimatedPose(visionSubsystem.getLastSeenPose())).andThen(
+                new AutoAlignReef(swerveDrive, visionSubsystem, true, this::alignCallback)
+        ));
   }
 
   /** Configures the operator controller buttons and axes to control the robot */
