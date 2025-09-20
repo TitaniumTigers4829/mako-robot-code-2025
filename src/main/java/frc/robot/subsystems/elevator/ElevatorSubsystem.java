@@ -66,6 +66,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorInterface.getElevatorPosition();
   }
 
+  public void hardStop() {
+    if (elevatorInterface.getElevatorPosition() == 0)
+    elevatorInterface.setElevatorPosition(-0.1);
+  }
+
   public double getVolts() {
     return elevatorInterface.getVolts();
   }
