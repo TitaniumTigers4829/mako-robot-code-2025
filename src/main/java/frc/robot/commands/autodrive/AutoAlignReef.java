@@ -20,6 +20,7 @@ import org.littletonrobotics.junction.Logger;
 public class AutoAlignReef extends DriveCommandBase {
   private final SwerveDrive swerveDrive;
   private final boolean left;
+  
 
   private Pose2d currentPose;
   private Pose2d desiredPose;
@@ -40,7 +41,7 @@ public class AutoAlignReef extends DriveCommandBase {
       boolean left,
       Consumer<Boolean> isAligned) {
     super(swerveDrive, visionSubsystem);
-    this.swerveDrive = swerveDrive;
+    this.swerveDrive = swerveDrive; 
     this.left = left;
     this.isAligned = isAligned;
     addRequirements(swerveDrive);
