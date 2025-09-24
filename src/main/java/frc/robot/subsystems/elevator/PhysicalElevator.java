@@ -29,7 +29,7 @@ public class PhysicalElevator implements ElevatorInterface {
 
   private final MotionMagicVoltage mmPositionRequest = new MotionMagicVoltage(0.0);
   private final DutyCycleOut dutyCyleOut = new DutyCycleOut(0.0);
-  // private final Follower follower;
+  private final Follower follower;
 
   private final MotionMagicTorqueCurrentFOC mmTorqueRequest = new MotionMagicTorqueCurrentFOC(0.0);
   private final TorqueCurrentFOC currentOut = new TorqueCurrentFOC(0.0);
@@ -52,7 +52,7 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    // follower = new Follower(leaderMotor.getDeviceID(), true);
+    follower = new Follower(leaderMotor.getDeviceID(), true);
     // Create elevator config
 
     // Static gravity compensation
@@ -86,6 +86,7 @@ public class PhysicalElevator implements ElevatorInterface {
     leaderMotor.getConfigurator().apply(elevatorConfig);
 
     // Use Follower control
+    followerMotor.setControl(follower);
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -165,21 +166,18 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
-    followerMotor.setControl(mmPositionRequest.withPosition(position));
   }
 
   @Override
   public void hardStop() {
     if (leaderPosition.getValueAsDouble() == 0) {
       leaderMotor.setControl(mmPositionRequest.withPosition(-0.1));
-      followerMotor.setControl(mmPositionRequest.withPosition(-0.1));
     }
   }
 
   @Override
   public void setVolts(double volts) {
     leaderMotor.setVoltage(-volts);
-    followerMotor.setVoltage(-volts);
   }
 
   @Override
@@ -203,7 +201,6 @@ public class PhysicalElevator implements ElevatorInterface {
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
     leaderMotor.getConfigurator().apply(elevatorConfig);
-    followerMotor.getConfigurator().apply(elevatorConfig);
   }
 
   @Override
