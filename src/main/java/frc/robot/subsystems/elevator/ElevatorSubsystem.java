@@ -67,8 +67,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void hardStop() {
-    if (elevatorInterface.getElevatorPosition() == 0)
-    elevatorInterface.setElevatorPosition(-0.1);
+    if (elevatorInterface.getElevatorPosition() == 0) elevatorInterface.setElevatorPosition(-0.1);
   }
 
   public double getVolts() {

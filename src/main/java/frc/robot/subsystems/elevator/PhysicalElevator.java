@@ -87,6 +87,7 @@ public class PhysicalElevator implements ElevatorInterface {
 
     // Use Follower control
     followerMotor.setControl(follower);
+    elevatorConfig.Feedback.SensorToMechanismRatio = 19.2;
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -144,7 +145,7 @@ public class PhysicalElevator implements ElevatorInterface {
     inputs.leaderMotorPosition = leaderPosition.getValueAsDouble();
     inputs.leaderMotorVoltage = leaderAppliedVoltage.getValueAsDouble();
     inputs.leaderDutyCycle = leaderDutyCycle.getValueAsDouble();
-    inputs.followerMotorPosition = followerPosition.getValueAsDouble();
+    inputs.followerMotorPosition = followerPosition.getValueAsDouble() / 4.0;
     inputs.followerMotorVoltage = followerAppliedVoltage.getValueAsDouble();
     inputs.followerDutyCycle = followerDutyCycle.getValueAsDouble();
     inputs.desiredPosition = elevatorReference.getValueAsDouble();

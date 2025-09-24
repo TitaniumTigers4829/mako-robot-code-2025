@@ -196,7 +196,11 @@ public class Robot extends LoggedRobot {
     // Auto align command for the left reef
     driverController
         .leftTrigger()
-        .whileTrue(new AutoAlignReef(swerveDrive, visionSubsystem, true, this::alignCallback));
+        .whileTrue(
+            new InstantCommand(
+                    () -> swerveDrive.resetEstimatedPose(visionSubsystem.getLastSeenPose()))
+                .andThen(
+                    new AutoAlignReef(swerveDrive, visionSubsystem, true, this::alignCallback)));
 
     // Resets the robot angle in the odometry, factors in which alliance the robot is on
     driverController
