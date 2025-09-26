@@ -167,6 +167,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
+    followerMotor.setControl(mmPositionRequest.withPosition(-position));
   }
 
   @Override
@@ -179,6 +180,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setVolts(double volts) {
     leaderMotor.setVoltage(-volts);
+    followerMotor.setVoltage(volts);
   }
 
   @Override
@@ -195,6 +197,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void resetElevatorPosition(double position) {
     leaderMotor.setPosition(position);
+    followerMotor.setPosition(position);
   }
 
   @Override
