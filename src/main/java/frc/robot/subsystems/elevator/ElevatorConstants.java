@@ -27,13 +27,13 @@ public class ElevatorConstants {
   public static final double INCLINE_ANGLE_RADIANS = Units.degreesToRadians(8);
   public static final boolean SIMULATE_GRAVITY = true;
 
-  public static final double STATOR_CURRENT_LIMIT = 100;
+  public static final double STATOR_CURRENT_LIMIT = 100; // 100
   public static final double SUPPLY_CURRENT_LIMIT = 0;
   public static final boolean STATOR_CURRENT_LIMIT_ENABLE = true;
   public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = false;
 
-  public static final double MOTION_MAGIC_MAX_ACCELERATION = 160;
-  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 100;
+  public static final double MOTION_MAGIC_MAX_ACCELERATION = 80; // 160
+  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 100; // 100
 
   public static final double ELEVATOR_ERROR_TOLERANCE = 0.08;
 
