@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 /** Add your docs here. */
 public class ElevatorConstants {
   public static final int ELEVATOR_LEADER_MOTOR_ID = 0;
-  public static final int ELEVATOR_FOLLOWER_MOTOR_ID = 62;
+  public static final int ELEVATOR_FOLLOWER_MOTOR_ID = 34;
 
   public static final double ELEVATOR_P = 10;
   public static final double ELEVATOR_I = 0;
@@ -46,10 +46,10 @@ public class ElevatorConstants {
   // Elevator setpoints
   public enum ElevatorSetpoints {
     L1(-2.50),
-    L2(-2.8 + .00004829),
+    L2(-2.8 + .0000000000000000000004829), // Easter egg lol
     L3(-4.517),
-    L4(-7.55), // -9.2
-    FEEDER(-0.3);
+    L4(-7.55),
+    FEEDER(-0.2);
 
     private final double position;
 

@@ -52,7 +52,7 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    follower = new Follower(leaderMotor.getDeviceID(), true);
+    follower = new Follower(leaderMotor.getDeviceID(), false);
     // Create elevator config
 
     // Static gravity compensation
@@ -167,7 +167,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
-    followerMotor.setControl(mmPositionRequest.withPosition(-position));
+    followerMotor.setControl(mmPositionRequest.withPosition(position));
   }
 
   @Override
