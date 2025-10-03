@@ -33,7 +33,6 @@ public class PhysicalElevator implements ElevatorInterface {
 
   private final MotionMagicTorqueCurrentFOC mmTorqueRequest = new MotionMagicTorqueCurrentFOC(0.0);
   private final TorqueCurrentFOC currentOut = new TorqueCurrentFOC(0.0);
-
   private final StatusSignal<Angle> leaderPosition;
   private final StatusSignal<Angle> followerPosition;
   private final StatusSignal<Voltage> leaderAppliedVoltage;
@@ -52,7 +51,7 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    follower = new Follower(leaderMotor.getDeviceID(), false);
+    follower = new Follower(leaderMotor.getDeviceID(), true);
     // Create elevator config
 
     // Static gravity compensation
@@ -87,7 +86,6 @@ public class PhysicalElevator implements ElevatorInterface {
 
     // Use Follower control
     followerMotor.setControl(follower);
-    elevatorConfig.Feedback.SensorToMechanismRatio = 19.2;
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -145,7 +143,7 @@ public class PhysicalElevator implements ElevatorInterface {
     inputs.leaderMotorPosition = leaderPosition.getValueAsDouble();
     inputs.leaderMotorVoltage = leaderAppliedVoltage.getValueAsDouble();
     inputs.leaderDutyCycle = leaderDutyCycle.getValueAsDouble();
-    inputs.followerMotorPosition = followerPosition.getValueAsDouble() / 4.0;
+    inputs.followerMotorPosition = followerPosition.getValueAsDouble();
     inputs.followerMotorVoltage = followerAppliedVoltage.getValueAsDouble();
     inputs.followerDutyCycle = followerDutyCycle.getValueAsDouble();
     inputs.desiredPosition = elevatorReference.getValueAsDouble();
@@ -167,7 +165,6 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
-    followerMotor.setControl(mmPositionRequest.withPosition(position));
   }
 
   @Override
