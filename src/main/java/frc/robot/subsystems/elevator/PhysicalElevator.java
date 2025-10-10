@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -121,8 +122,8 @@ public class PhysicalElevator implements ElevatorInterface {
         leaderVelocity,
         followerTemp,
         leaderTemp);
-    leaderMotor.optimizeBusUtilization();
     followerMotor.optimizeBusUtilization();
+    leaderMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -166,11 +167,11 @@ public class PhysicalElevator implements ElevatorInterface {
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
   }
-
+ 
   @Override
   public void hardStop() {
-    if (leaderPosition.getValueAsDouble() == 0) {
-      leaderMotor.setControl(mmPositionRequest.withPosition(-0.1));
+    if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD) {
+      leaderMotor.setControl(mmPositionRequest.withPosition(0.001));
     }
   }
 

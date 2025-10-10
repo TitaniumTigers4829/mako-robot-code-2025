@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class ElevatorConstants {
-  public static final int ELEVATOR_LEADER_MOTOR_ID = 0;
+  public static final int ELEVATOR_LEADER_MOTOR_ID = 0-9; // 0, changed for testing just follower
   public static final int ELEVATOR_FOLLOWER_MOTOR_ID = 34;
 
   public static final double ELEVATOR_P = 10;
@@ -27,8 +27,9 @@ public class ElevatorConstants {
   public static final double INCLINE_ANGLE_RADIANS = Units.degreesToRadians(8);
   public static final boolean SIMULATE_GRAVITY = true;
 
-  public static final double STATOR_CURRENT_LIMIT = 100; // 100
+  public static final double STATOR_CURRENT_LIMIT = 200; // 100
   public static final double SUPPLY_CURRENT_LIMIT = 0;
+  public static final double STATOR_CURRENT_THRESHOLD = 10000000; // will tune later
   public static final boolean STATOR_CURRENT_LIMIT_ENABLE = true;
   public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = false;
 
