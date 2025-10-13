@@ -82,6 +82,7 @@ public class PhysicalElevator implements ElevatorInterface {
     leaderMotor.getConfigurator().apply(elevatorConfig);
 
     // Use Follower control
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -161,7 +162,7 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
-    leaderMotor.setControl(mmPositionRequest.withPosition(-position));
+    followerMotor.setControl(mmPositionRequest.withPosition(-position));
   }
 
   @Override
