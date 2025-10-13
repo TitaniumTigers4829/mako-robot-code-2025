@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class ElevatorConstants {
-  public static final int ELEVATOR_LEADER_MOTOR_ID = 0-9; // 0, changed for testing just follower
+  public static final int ELEVATOR_LEADER_MOTOR_ID = 0 - 9; // 0, changed for testing just follower
   public static final int ELEVATOR_FOLLOWER_MOTOR_ID = 34;
 
   public static final double ELEVATOR_P = 10;
@@ -40,9 +40,9 @@ public class ElevatorConstants {
 
   // limit
   public static final double LIMIT = 0.0;
-  public static final boolean LIMIT_ENABLE = true;
+  public static final boolean LIMIT_ENABLE = false;
   public static final double REVERSE_LIMIT = -9.3;
-  public static final boolean REVERSE_LIMIT_ENABLE = true;
+  public static final boolean REVERSE_LIMIT_ENABLE = false;
 
   // Elevator setpoints
   public enum ElevatorSetpoints {

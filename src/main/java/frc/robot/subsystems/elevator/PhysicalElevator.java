@@ -8,10 +8,8 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -30,7 +28,6 @@ public class PhysicalElevator implements ElevatorInterface {
 
   private final MotionMagicVoltage mmPositionRequest = new MotionMagicVoltage(0.0);
   private final DutyCycleOut dutyCyleOut = new DutyCycleOut(0.0);
-  private final Follower follower;
 
   private final MotionMagicTorqueCurrentFOC mmTorqueRequest = new MotionMagicTorqueCurrentFOC(0.0);
   private final TorqueCurrentFOC currentOut = new TorqueCurrentFOC(0.0);
@@ -52,7 +49,6 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    follower = new Follower(leaderMotor.getDeviceID(), true);
     // Create elevator config
 
     // Static gravity compensation
@@ -86,7 +82,6 @@ public class PhysicalElevator implements ElevatorInterface {
     leaderMotor.getConfigurator().apply(elevatorConfig);
 
     // Use Follower control
-    followerMotor.setControl(follower);
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -166,12 +161,15 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
+    leaderMotor.setControl(mmPositionRequest.withPosition(-position));
   }
- 
+
   @Override
   public void hardStop() {
-    if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD) {
-      leaderMotor.setControl(mmPositionRequest.withPosition(0.001));
+    if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD
+        && followerStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD) {
+      leaderMotor.setControl(mmPositionRequest.withPosition(-0.001));
+      followerMotor.setControl(mmPositionRequest.withPosition(0.001));
     }
   }
 
