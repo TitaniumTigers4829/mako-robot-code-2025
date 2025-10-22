@@ -71,7 +71,6 @@ public class PhysicalClimbPivot implements ClimbPivotInterface {
     return climbMotor.getMotorVoltage().getValueAsDouble();
   }
 
-  // cocaine
   public void setVolts(double volts) {
     climbMotor.setVoltage(volts);
   }
