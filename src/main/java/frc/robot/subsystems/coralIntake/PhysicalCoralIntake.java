@@ -14,7 +14,6 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import frc.robot.Constants.HardwareConstants;
 
 public class PhysicalCoralIntake implements CoralIntakeInterface {
@@ -150,17 +149,11 @@ public class PhysicalCoralIntake implements CoralIntakeInterface {
     intakeConfig.Slot0.kP = P;
     coralIntakeMotor.getConfigurator().apply(intakeConfig);
   }
-  public class PIDController{
+
+  public class PIDController {
 
     public double kP = 5.0;
     public double ki = 0.0;
     public double kd = 0.0;
-     
-
-    MotorControllerRPM rpmController = new MotorControllerRPM(kP, ki, kd);
-    rpmController.setTargetRPM(1500);
-    
-    
-    
   }
 }
