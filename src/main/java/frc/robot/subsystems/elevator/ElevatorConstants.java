@@ -32,8 +32,8 @@ public class ElevatorConstants {
   public static final boolean STATOR_CURRENT_LIMIT_ENABLE = true;
   public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = false;
 
-  public static final double MOTION_MAGIC_MAX_ACCELERATION = 160;
-  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 100;
+  public static final double MOTION_MAGIC_MAX_ACCELERATION = 80; // prev: 160
+  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 50; // prev: 100
 
   public static final double ELEVATOR_ERROR_TOLERANCE = 0.08;
 
