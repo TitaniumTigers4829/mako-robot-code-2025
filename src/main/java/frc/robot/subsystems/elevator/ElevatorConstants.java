@@ -32,8 +32,8 @@ public class ElevatorConstants {
   public static final boolean STATOR_CURRENT_LIMIT_ENABLE = true;
   public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = false;
 
-  public static final double MOTION_MAGIC_MAX_ACCELERATION = 160;
-  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 100;
+  public static final double MOTION_MAGIC_MAX_ACCELERATION = 80; // 160
+  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 50;
 
   public static final double ELEVATOR_ERROR_TOLERANCE = 0.08;
 
@@ -45,11 +45,11 @@ public class ElevatorConstants {
 
   // Elevator setpoints
   public enum ElevatorSetpoints {
-    L1(-2.50),
-    L2(-2.8 + .00004829),
-    L3(-4.517),
-    L4(-7.55), // -9.2
-    FEEDER(-0.4);
+    L1(2.50),
+    L2(2.8),
+    L3(4.517),
+    L4(7.55), // -9.2
+    FEEDER(0.49);
 
     private final double position;
 

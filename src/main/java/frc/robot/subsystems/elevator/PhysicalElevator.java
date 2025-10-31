@@ -165,14 +165,15 @@ public class PhysicalElevator implements ElevatorInterface {
     followerMotor.setControl(mmPositionRequest.withPosition(-position));
   }
 
-  @Override
-  public void hardStop() {
-    if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD
-        && followerStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD) {
-      leaderMotor.setControl(mmPositionRequest.withPosition(-0.001));
-      followerMotor.setControl(mmPositionRequest.withPosition(0.001));
-    }
-  }
+  // @Override
+  // public void hardStop() {
+  //   if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD
+  //       && followerStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD)
+  // {
+  //     leaderMotor.setControl(mmPositionRequest.withPosition(-0.001));
+  //     followerMotor.setControl(mmPositionRequest.withPosition(0.001));
+  //   }
+  // }
 
   @Override
   public void setVolts(double volts) {

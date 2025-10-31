@@ -1,6 +1,9 @@
 package frc.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.AutoLog;
+
 public interface ElevatorInterface {
+  @AutoLog
   /** Creates a new ElevatorInterface. */
   public static class ElevatorInputs { // For values
     public double leaderMotorPosition = 0.0;
