@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorInterface {
   /** Creates a new ElevatorInterface. */
+  @AutoLog
   public static class ElevatorInputs { // For values
     public double leaderMotorPosition = 0.0;
     public double followerMotorPosition = 0.0;

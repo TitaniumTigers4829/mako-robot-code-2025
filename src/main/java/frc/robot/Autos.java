@@ -22,7 +22,6 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.FollowSwerveSampleCommand;
 import frc.robot.commands.elevator.ScoreL4;
 import frc.robot.commands.elevator.SetElevatorPosition;
-import frc.robot.commands.funnel.SetFunnelAngle;
 import frc.robot.extras.util.AllianceFlipper;
 import frc.robot.extras.util.ReefLocations;
 import frc.robot.extras.util.ReefLocations.ReefBranch;
@@ -31,8 +30,6 @@ import frc.robot.subsystems.coralIntake.CoralIntakeSubsystem;
 import frc.robot.subsystems.coralIntake.CoralIntakeSubsystem.IntakeState;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorSetpoints;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.funnelPivot.FunnelConstants;
-import frc.robot.subsystems.funnelPivot.FunnelSubsystem;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.HashMap;
@@ -48,7 +45,6 @@ public class Autos {
   private CoralIntakeSubsystem coralIntakeSubsystem;
   private SwerveDrive swerveDrive;
   private VisionSubsystem visionSubsystem;
-  private FunnelSubsystem funnelSubsystem;
   private final String NONE_NAME = "Do Nothing";
 
   private final HashMap<String, Supplier<Command>> routines = new HashMap<>();
@@ -86,13 +82,11 @@ public class Autos {
       ElevatorSubsystem elevatorSubsystem,
       CoralIntakeSubsystem coralIntakeSubsystem,
       SwerveDrive swerveDrive,
-      VisionSubsystem visionSubsystem,
-      FunnelSubsystem funnelSubsystem) {
+      VisionSubsystem visionSubsystem) {
     this.elevatorSubsystem = elevatorSubsystem;
     this.coralIntakeSubsystem = coralIntakeSubsystem;
     this.swerveDrive = swerveDrive;
     this.visionSubsystem = visionSubsystem;
-    this.funnelSubsystem = funnelSubsystem;
     chooser = new LoggedDashboardChooser<>("Auto Chooser");
     chooser.addDefaultOption(NONE_NAME, NONE_NAME);
     routines.put(NONE_NAME, Commands::none);
@@ -219,10 +213,7 @@ public class Autos {
                         () -> false,
                         () -> false,
                         this::alignCallback)
-                    .withTimeout(2.4829)
-                    .andThen(
-                        new SetFunnelAngle(funnelSubsystem, FunnelConstants.ANGLE_INTAKE)
-                            .withTimeout(1.24829)),
+                    .withTimeout(2.4829),
                 new InstantCommand(
                     () -> swerveDrive.resetEstimatedPose(visionSubsystem.getLastSeenPose())),
                 new AutoAlignReef(swerveDrive, visionSubsystem, false, this::alignCallback)
@@ -248,10 +239,7 @@ public class Autos {
                         () -> false,
                         () -> false,
                         this::alignCallback)
-                    .withTimeout(1.94829)
-                    .alongWith(
-                        new SetFunnelAngle(funnelSubsystem, FunnelConstants.ANGLE_INTAKE)
-                            .withTimeout(1.248294829)),
+                    .withTimeout(1.94829),
                 new AutoAlignReef(swerveDrive, visionSubsystem, false, this::alignCallback)
                     .withTimeout(4),
                 new ScoreL4(elevatorSubsystem, coralIntakeSubsystem)
@@ -308,10 +296,7 @@ public class Autos {
                         () -> false,
                         () -> false,
                         this::alignCallback)
-                    .withTimeout(1.94829)
-                    .alongWith(
-                        new SetFunnelAngle(funnelSubsystem, FunnelConstants.ANGLE_INTAKE)
-                            .withTimeout(1.248294829)),
+                    .withTimeout(1.94829),
                 new AutoAlignReef(swerveDrive, visionSubsystem, true, this::alignCallback)
                     .withTimeout(4),
                 new ScoreL4(elevatorSubsystem, coralIntakeSubsystem)

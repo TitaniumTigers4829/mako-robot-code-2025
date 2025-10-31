@@ -17,10 +17,6 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.elevator.SetElevatorPosition;
 import frc.robot.extras.util.JoystickUtil;
 import frc.robot.sim.SimWorld;
-import frc.robot.subsystems.climbPivot.ClimbPivotInterface;
-import frc.robot.subsystems.climbPivot.ClimbPivotSubsystem;
-import frc.robot.subsystems.climbPivot.PhysicalClimbPivot;
-import frc.robot.subsystems.climbPivot.SimulatedClimbPivot;
 import frc.robot.subsystems.coralIntake.CoralIntakeConstants;
 import frc.robot.subsystems.coralIntake.CoralIntakeInterface;
 import frc.robot.subsystems.coralIntake.CoralIntakeSubsystem;
@@ -32,10 +28,6 @@ import frc.robot.subsystems.elevator.ElevatorInterface;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.PhysicalElevator;
 import frc.robot.subsystems.elevator.SimulatedElevator;
-import frc.robot.subsystems.funnelPivot.FunnelPivotInterface;
-import frc.robot.subsystems.funnelPivot.FunnelSubsystem;
-import frc.robot.subsystems.funnelPivot.PhysicalFunnelPivot;
-import frc.robot.subsystems.funnelPivot.SimulatedFunnelPivot;
 import frc.robot.subsystems.leds.LEDConstants.LEDProcess;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.swerve.SwerveConstants;
@@ -74,8 +66,6 @@ public class Robot extends LoggedRobot {
   private SwerveDrive swerveDrive;
   private ElevatorSubsystem elevatorSubsystem;
   private CoralIntakeSubsystem coralIntakeSubsystem;
-  private FunnelSubsystem funnelSubsystem;
-  private ClimbPivotSubsystem climbPivotSubsystem;
   private LEDSubsystem ledSubsystem;
 
   private SimWorld simWorld;
@@ -324,21 +314,6 @@ public class Robot extends LoggedRobot {
                     () -> coralIntakeSubsystem.intakeCoral(),
                     () -> coralIntakeSubsystem.setIntakeState(IntakeState.STOPPED),
                     coralIntakeSubsystem)));
-
-    // OTHER COMMANDS
-    // Manual climb control
-    operatorController
-        .povUp()
-        .whileTrue(
-            climbPivotSubsystem.manualPivotClimb(
-                () -> JoystickUtil.modifyAxis(() -> operatorController.getLeftY(), 2)));
-
-    // Manual funnel control
-    operatorController
-        .povDown()
-        .whileTrue(
-            funnelSubsystem.manualFunnel(
-                () -> JoystickUtil.modifyAxis(() -> operatorController.getLeftY(), 2)));
   }
 
   /** Checks the git status and records it to the log */
@@ -411,8 +386,6 @@ public class Robot extends LoggedRobot {
                 new PhysicalModule(SwerveConstants.compModuleConfigs[3]));
         this.visionSubsystem = new VisionSubsystem(new PhysicalVision());
         this.elevatorSubsystem = new ElevatorSubsystem(new PhysicalElevator());
-        this.funnelSubsystem = new FunnelSubsystem(new PhysicalFunnelPivot());
-        this.climbPivotSubsystem = new ClimbPivotSubsystem(new PhysicalClimbPivot());
         this.coralIntakeSubsystem = new CoralIntakeSubsystem(new PhysicalCoralIntake());
         this.ledSubsystem = new LEDSubsystem();
         this.simWorld = null;
@@ -428,9 +401,7 @@ public class Robot extends LoggedRobot {
                 new PhysicalModule(SwerveConstants.devModuleConfigs[3]));
         this.visionSubsystem = new VisionSubsystem(new PhysicalVision());
         this.elevatorSubsystem = new ElevatorSubsystem(new PhysicalElevator());
-        this.funnelSubsystem = new FunnelSubsystem(new PhysicalFunnelPivot());
         this.coralIntakeSubsystem = new CoralIntakeSubsystem(new PhysicalCoralIntake());
-        this.climbPivotSubsystem = new ClimbPivotSubsystem(new PhysicalClimbPivot());
         this.ledSubsystem = new LEDSubsystem();
         this.simWorld = null;
       }
@@ -445,9 +416,7 @@ public class Robot extends LoggedRobot {
                 new PhysicalModule(SwerveConstants.aquilaModuleConfigs[3]));
         this.visionSubsystem = new VisionSubsystem(new PhysicalVision());
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorInterface() {});
-        this.funnelSubsystem = new FunnelSubsystem(new PhysicalFunnelPivot());
         this.coralIntakeSubsystem = new CoralIntakeSubsystem(new CoralIntakeInterface() {});
-        this.climbPivotSubsystem = new ClimbPivotSubsystem(new PhysicalClimbPivot());
         this.simWorld = null;
       }
 
@@ -466,9 +435,7 @@ public class Robot extends LoggedRobot {
             new VisionSubsystem(new SimulatedVision(() -> simWorld.aprilTagSim()));
         this.swerveDrive.resetEstimatedPose(new Pose2d(7, 4, new Rotation2d()));
         this.elevatorSubsystem = new ElevatorSubsystem(new SimulatedElevator());
-        this.funnelSubsystem = new FunnelSubsystem(new SimulatedFunnelPivot());
         this.coralIntakeSubsystem = new CoralIntakeSubsystem(new SimulatedCoralntake());
-        this.climbPivotSubsystem = new ClimbPivotSubsystem(new SimulatedClimbPivot());
         this.ledSubsystem = new LEDSubsystem();
         SmartDashboard.putBoolean("Coral", false);
       }
@@ -486,9 +453,7 @@ public class Robot extends LoggedRobot {
                 new ModuleInterface() {},
                 new ModuleInterface() {});
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorInterface() {});
-        this.funnelSubsystem = new FunnelSubsystem(new FunnelPivotInterface() {});
         this.coralIntakeSubsystem = new CoralIntakeSubsystem(new CoralIntakeInterface() {});
-        this.climbPivotSubsystem = new ClimbPivotSubsystem(new ClimbPivotInterface() {});
         this.simWorld = null;
       }
     }
@@ -502,8 +467,7 @@ public class Robot extends LoggedRobot {
             this.elevatorSubsystem,
             this.coralIntakeSubsystem,
             this.swerveDrive,
-            this.visionSubsystem,
-            this.funnelSubsystem);
+            this.visionSubsystem);
   }
 
   /** This function is called periodically during operator control. */
