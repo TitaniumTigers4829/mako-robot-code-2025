@@ -8,7 +8,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
@@ -29,11 +28,9 @@ public class PhysicalElevator implements ElevatorInterface {
 
   private final MotionMagicVoltage mmPositionRequest = new MotionMagicVoltage(0.0);
   private final DutyCycleOut dutyCyleOut = new DutyCycleOut(0.0);
-  private final Follower follower;
 
   private final MotionMagicTorqueCurrentFOC mmTorqueRequest = new MotionMagicTorqueCurrentFOC(0.0);
   private final TorqueCurrentFOC currentOut = new TorqueCurrentFOC(0.0);
-
   private final StatusSignal<Angle> leaderPosition;
   private final StatusSignal<Angle> followerPosition;
   private final StatusSignal<Voltage> leaderAppliedVoltage;
@@ -52,7 +49,6 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    follower = new Follower(leaderMotor.getDeviceID(), true);
     // Create elevator config
 
     // Static gravity compensation
@@ -86,8 +82,7 @@ public class PhysicalElevator implements ElevatorInterface {
     leaderMotor.getConfigurator().apply(elevatorConfig);
 
     // Use Follower control
-    followerMotor.setControl(follower);
-    elevatorConfig.Feedback.SensorToMechanismRatio = 19.2;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -123,8 +118,8 @@ public class PhysicalElevator implements ElevatorInterface {
         leaderVelocity,
         followerTemp,
         leaderTemp);
-    leaderMotor.optimizeBusUtilization();
     followerMotor.optimizeBusUtilization();
+    leaderMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -145,7 +140,7 @@ public class PhysicalElevator implements ElevatorInterface {
     inputs.leaderMotorPosition = leaderPosition.getValueAsDouble();
     inputs.leaderMotorVoltage = leaderAppliedVoltage.getValueAsDouble();
     inputs.leaderDutyCycle = leaderDutyCycle.getValueAsDouble();
-    inputs.followerMotorPosition = followerPosition.getValueAsDouble() / 4.0;
+    inputs.followerMotorPosition = followerPosition.getValueAsDouble();
     inputs.followerMotorVoltage = followerAppliedVoltage.getValueAsDouble();
     inputs.followerDutyCycle = followerDutyCycle.getValueAsDouble();
     inputs.desiredPosition = elevatorReference.getValueAsDouble();
@@ -170,12 +165,15 @@ public class PhysicalElevator implements ElevatorInterface {
     followerMotor.setControl(mmPositionRequest.withPosition(-position));
   }
 
-  @Override
-  public void hardStop() {
-    if (leaderPosition.getValueAsDouble() == 0) {
-      leaderMotor.setControl(mmPositionRequest.withPosition(-0.1));
-    }
-  }
+  // @Override
+  // public void hardStop() {
+  //   if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD
+  //       && followerStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD)
+  // {
+  //     leaderMotor.setControl(mmPositionRequest.withPosition(-0.001));
+  //     followerMotor.setControl(mmPositionRequest.withPosition(0.001));
+  //   }
+  // }
 
   @Override
   public void setVolts(double volts) {

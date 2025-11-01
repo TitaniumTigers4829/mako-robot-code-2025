@@ -59,15 +59,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem(ElevatorInterface elevatorInterface) {
     this.elevatorInterface = elevatorInterface;
-    enableLimits(true, true);
+    enableLimits(false, false);
   }
 
   public double getElevatorPosition() {
     return elevatorInterface.getElevatorPosition();
-  }
-
-  public void hardStop() {
-    if (elevatorInterface.getElevatorPosition() == 0) elevatorInterface.setElevatorPosition(-0.1);
   }
 
   public double getVolts() {

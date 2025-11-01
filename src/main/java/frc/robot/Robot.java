@@ -234,7 +234,7 @@ public class Robot extends LoggedRobot {
         .rightBumper()
         .whileTrue(
             elevatorSubsystem
-                .manualElevator(() -> operatorController.getLeftY())
+                .manualElevator(() -> -operatorController.getLeftY())
                 .onlyIf(
                     () ->
                         (coralIntakeSubsystem.isIntakeComplete()
