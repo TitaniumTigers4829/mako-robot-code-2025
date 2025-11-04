@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// copyrightIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -32,8 +32,8 @@ public class ElevatorConstants {
   public static final boolean STATOR_CURRENT_LIMIT_ENABLE = true;
   public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = false;
 
-  public static final double MOTION_MAGIC_MAX_ACCELERATION = 160;
-  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 100;
+  public static final double MOTION_MAGIC_MAX_ACCELERATION = 80; // 160
+  public static final double MOTION_MAGIC_CRUISE_VELOCITY = 50;
 
   public static final double ELEVATOR_ERROR_TOLERANCE = 0.08;
 
@@ -45,11 +45,11 @@ public class ElevatorConstants {
 
   // Elevator setpoints
   public enum ElevatorSetpoints {
-    L1(-2.50),
-    L2(-3.8 + .00004829),
-    L3(-5.7),
-    L4(-8.89), // -9.2
-    FEEDER(-0.480458984375);
+    L1(2.50),
+    L2(2.8),
+    L3(4.517),
+    L4(7.55), // -9.2
+    FEEDER(0.49);
 
     private final double position;
 
