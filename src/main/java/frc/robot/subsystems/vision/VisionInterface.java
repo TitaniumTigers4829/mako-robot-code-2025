@@ -134,10 +134,9 @@ public interface VisionInterface {
    * @param headingDegrees the angle the robot is facing in degrees (0 degrees facing the red
    *     alliance)
    * @param headingRateDegreesPerSecond the rate the robot is rotating, CCW positive
-   * @param odometryPose the current fused pose of the robot
    */
   default void setOdometryInfo(
-      double headingDegrees, double headingRateDegreesPerSecond, Pose2d odometryPose) {}
+      double headingDegrees, double headingRateDegreesPerSecond) {}
 
   /***
    * Checks if the measurement from the limelight is valid
