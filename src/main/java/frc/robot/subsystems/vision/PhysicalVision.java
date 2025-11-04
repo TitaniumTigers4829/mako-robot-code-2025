@@ -125,8 +125,7 @@ public class PhysicalVision implements VisionInterface {
   }
 
   @Override
-  public void setOdometryInfo(
-      double headingDegrees, double headingRateDegrees) {
+  public void setOdometryInfo(double headingDegrees, double headingRateDegrees) {
     this.headingDegrees = headingDegrees;
     this.headingRateDegreesPerSecond = headingRateDegrees;
   }

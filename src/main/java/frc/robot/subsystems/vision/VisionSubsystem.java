@@ -82,9 +82,8 @@ public class VisionSubsystem extends SubsystemBase {
    * @param headingDegrees The robot's heading in degrees.
    * @param headingRateDegrees The robot's rate of rotation in degrees per second.
    */
-  public void setOdometryInfo(
-      double headingDegrees, double headingRateDegrees, Pose2d odometryPose) {
-    visionInterface.setOdometryInfo(headingDegrees, headingRateDegrees, odometryPose);
+  public void setOdometryInfo(double headingDegrees, double headingRateDegrees) {
+    visionInterface.setOdometryInfo(headingDegrees, headingRateDegrees);
   }
 
   /**
