@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.extras.util.ReefLocations;
 import frc.robot.sim.simField.SimArena;
 import frc.robot.sim.simField.SimArena.FieldMap;
 import frc.robot.sim.simField.SimGamePiece.GamePieceTarget;
