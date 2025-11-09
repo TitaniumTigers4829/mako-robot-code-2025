@@ -40,9 +40,7 @@ public abstract class DriveCommandBase extends Command {
     // Update the odometry information for the vision subsystem to use while filtering the vision
     // pose estimate
     vision.setOdometryInfo(
-        swerveDrive.getOdometryRotation2d().getDegrees(),
-        swerveDrive.getGyroRate(),
-        swerveDrive.getEstimatedPose());
+        swerveDrive.getOdometryRotation2d().getDegrees(), swerveDrive.getGyroRate());
     for (Limelight limelight : Limelight.values()) {
       addLimelightVisionMeasurement(limelight);
     }

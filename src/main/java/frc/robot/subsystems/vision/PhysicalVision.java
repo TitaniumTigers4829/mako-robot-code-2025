@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  */
 public class PhysicalVision implements VisionInterface {
 
-  private Pose2d odometryPose = new Pose2d();
   private double headingDegrees = 0;
   private double headingRateDegreesPerSecond = 0;
 
@@ -126,11 +125,9 @@ public class PhysicalVision implements VisionInterface {
   }
 
   @Override
-  public void setOdometryInfo(
-      double headingDegrees, double headingRateDegrees, Pose2d odometryPose) {
+  public void setOdometryInfo(double headingDegrees, double headingRateDegrees) {
     this.headingDegrees = headingDegrees;
     this.headingRateDegreesPerSecond = headingRateDegrees;
-    this.odometryPose = odometryPose;
   }
 
   @Override
