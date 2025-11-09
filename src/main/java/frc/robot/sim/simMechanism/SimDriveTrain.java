@@ -83,7 +83,6 @@ public class SimDriveTrain {
       chassis.setLinearVelocity(0, 0);
       chassis.setAngularVelocity(0);
     }
-    Logger.recordOutput("Odometry/ChassisPose", getChassisWorldPose());
   }
 
   /**
