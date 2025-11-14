@@ -123,7 +123,7 @@ public class PhysicalVision implements VisionInterface {
 
   @Override
   public double getAmbiguity(Limelight limelight) {
-    return limelightEstimates.get(limelight.getId()).rawFiducials()[getNumberOfAprilTags(limelight)].ambiguity();
+    return limelightEstimates.get(limelight.getId()).rawFiducials()[getNumberOfAprilTags(limelight) - 1].ambiguity();
   }
 
   @Override
