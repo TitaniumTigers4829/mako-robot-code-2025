@@ -16,6 +16,11 @@ import frc.robot.extras.util.ReefLocations;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to plan a path for the robot to follow using a repulsor field. The field is
+ * created by a set of obstacles, and the robot is attracted to the goal while being repelled by the
+ * obstacles.
+ */
 public class RepulsorFieldPlanner {
   private abstract static class Obstacle {
     double strength;
@@ -207,8 +212,8 @@ public class RepulsorFieldPlanner {
   static final List<Obstacle> FIELD_OBSTACLES =
       List.of(
           // Reef
-          new TeardropObstacle(ReefLocations.BLUE_REEF, 1, 2, .83, 3, 2),
-          new TeardropObstacle(ReefLocations.RED_REEF, 1, 2, .83, 3, 2),
+          new TeardropObstacle(ReefLocations.BLUE_REEF, 1, 2.5, .83, 3, 2),
+          new TeardropObstacle(ReefLocations.RED_REEF, 1, 2.5, .83, 3, 2),
           // Walls
           new HorizontalObstacle(0.0, 0.5, .5, true),
           new HorizontalObstacle(FIELD_WIDTH, 0.5, .5, false),
@@ -268,9 +273,9 @@ public class RepulsorFieldPlanner {
     if (displacement.getNorm() == 0) {
       return new Translation2d();
     }
-    var direction = displacement.getAngle();
-    var mag = (1 + 1.0 / (1e-6 + displacement.getNorm()));
-    return new Translation2d(mag, direction);
+    Rotation2d direction = displacement.getAngle();
+    double rawMag = (1 + 1.0 / (1e-6 + displacement.getNorm()));
+    return new Translation2d(rawMag, direction);
   }
 
   Translation2d getObstacleForce(Translation2d curLocation, Translation2d target) {
@@ -293,8 +298,8 @@ public class RepulsorFieldPlanner {
 
   public RepulsorSample sampleField(
       Translation2d curTrans, double maxSpeed, double slowdownDistance) {
-    var err = curTrans.minus(goal);
-    var netForce = getForce(curTrans, goal);
+    Translation2d err = curTrans.minus(goal);
+    Translation2d netForce = getForce(curTrans, goal);
 
     double stepSize_m;
     if (err.getNorm() < slowdownDistance) {
@@ -304,7 +309,7 @@ public class RepulsorFieldPlanner {
     } else {
       stepSize_m = maxSpeed * Robot.defaultPeriodSecs;
     }
-    var step = new Translation2d(stepSize_m, netForce.getAngle());
+    Translation2d step = new Translation2d(stepSize_m, netForce.getAngle());
     return new RepulsorSample(
         curTrans.plus(step),
         step.getX() / Robot.defaultPeriodSecs,

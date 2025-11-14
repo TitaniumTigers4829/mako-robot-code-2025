@@ -50,7 +50,7 @@ public class SimulatedElevator implements ElevatorInterface {
     inputs.followerMotorPosition = m_elevatorSim.getPositionMeters();
     inputs.leaderMotorVoltage = currentVolts;
     inputs.followerMotorVoltage = currentVolts;
-    inputs.desiredPosition = 1;
+    inputs.desiredPosition = desiredPosition;
   }
 
   @Override
@@ -60,7 +60,7 @@ public class SimulatedElevator implements ElevatorInterface {
 
   @Override
   public void setElevatorPosition(double position) {
-    // desiredPosition = position;
+    desiredPosition = position;
     m_pidController.setSetpoint(position);
     double output = m_pidController.calculate(getElevatorPosition(), position);
     // double feedforward = m_feedforward.calculate(m_pidController.getSetpoint());

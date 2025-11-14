@@ -6,7 +6,7 @@ package frc.robot.subsystems.climbPivot;
 
 /** Add your docs here. */
 public class PivotConstants {
-  public static final int CLIMB_PIVOT_MOTOR_ID = 34;
+  public static final int CLIMB_PIVOT_MOTOR_ID = 3;
 
   public static final double CLIMB_PIVOT_P = 1;
   public static final double CLIMB_PIVOT_I = 0;

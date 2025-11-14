@@ -2,14 +2,17 @@ package frc.robot.subsystems.coralIntake;
 
 public final class CoralIntakeConstants {
   public static final int CORAL_INTAKE_MOTOR_ID = 30;
-  public static final int INNER_CORAL_SENSOR_ID = 3;
+  public static final int INNER_CORAL_SENSOR_ID = 1;
   public static final int OUTER_CORAL_SENSOR_ID = 0;
 
   public static final double WAITING_INTAKE_SPEED = 1500;
   public static final double INGEST_SPEED = 700;
-  public static final double EJECT_SPEED = 5000;
+  public static final double EJECT_SPEED = 3000;
   public static final double REVERSE_INTAKE_SPEED = -200;
   public static final double NEUTRAL_INTAKE_SPEED = 0.0;
+
+  /** In seconds */
+  public static final double SENSOR_DEBOUNCE_TIME = 0.04;
 
   // PID and feedforward constants
   public static final double INTAKE_P = 0.3;

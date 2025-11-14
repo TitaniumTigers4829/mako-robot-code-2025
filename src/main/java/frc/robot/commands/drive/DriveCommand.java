@@ -1,12 +1,11 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DriveCommand extends DriveCommandBase {
 
@@ -15,6 +14,7 @@ public class DriveCommand extends DriveCommandBase {
   private final DoubleSupplier leftJoystickX, leftJoystickY, rightJoystickX;
   private final BooleanSupplier isFieldRelative, isHighRotation;
   private double angularSpeed;
+  private final Consumer<Boolean> isAligned;
 
   /**
    * The command for driving the robot using joystick inputs.
@@ -34,9 +34,11 @@ public class DriveCommand extends DriveCommandBase {
       DoubleSupplier leftJoystickY,
       DoubleSupplier rightJoystickX,
       BooleanSupplier isFieldRelative,
-      BooleanSupplier isHighRotation) {
+      BooleanSupplier isHighRotation,
+      Consumer<Boolean> isAligned) {
     super(driveSubsystem, visionSubsystem);
     this.driveSubsystem = driveSubsystem;
+    this.isAligned = isAligned;
     addRequirements(driveSubsystem, visionSubsystem);
 
     this.leftJoystickY = leftJoystickY;
@@ -51,11 +53,6 @@ public class DriveCommand extends DriveCommandBase {
 
   @Override
   public void execute() {
-
-    Supplier<Translation2d> driveTranslationalControlSupplier =
-        () -> {
-          return new Translation2d(leftJoystickX.getAsDouble(), leftJoystickY.getAsDouble());
-        };
     // Most of the time the driver prefers that the robot rotates slowly, as it gives them more
     // control
     // but sometimes (e.g. when fighting defense bots) being able to rotate quickly is necessary
@@ -73,6 +70,7 @@ public class DriveCommand extends DriveCommandBase {
         isFieldRelative.getAsBoolean());
     // Runs all the code from DriveCommand that estimates pose
     super.execute();
+    isAligned.accept(driveSubsystem.isReefInRange());
   }
 
   @Override

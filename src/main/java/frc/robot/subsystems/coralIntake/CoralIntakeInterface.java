@@ -23,6 +23,14 @@ public interface CoralIntakeInterface {
 
   default void setIntakeVoltage(double volts) {}
 
+  default boolean hasCoral() {
+    return false;
+  }
+
+  default boolean hasControl() {
+    return false;
+  }
+
   default void updateInputs(CoralIntakeInputs inputs) {}
 
   default void setIntakeSpeed(double speed) {}

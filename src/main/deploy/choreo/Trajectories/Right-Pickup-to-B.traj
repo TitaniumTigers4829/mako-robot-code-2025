@@ -14,8 +14,12 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"RP.x()", "val":1.02}, "y":{"exp":"RP.y()", "val":1.02}, "heading":{"exp":"RP.heading()", "val":0.9544285207022268}, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+<<<<<<< HEAD
+    {"x":{"exp":"B.x()", "val":3.2009067058563234}, "y":{"exp":"B.y()", "val":3.909320497512817}, "heading":{"exp":"B.heading()", "val":0.0}, "intervals":25, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+=======
     {"x":{"exp":"B.x()", "val":3.2009067058563234}, "y":{"exp":"B.y()", "val":3.909320497512817}, "heading":{"exp":"B.heading()", "val":0.0}, "intervals":25, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"17.5 m", "val":17.5}, "y":{"exp":"8 m", "val":8.0}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+>>>>>>> c2806f3dac4c9b2739db87d95b13628bce4d328d
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},

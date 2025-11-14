@@ -265,7 +265,7 @@ public class PhysicalVisionTest {
   @ParameterizedTest
   @ValueSource(doubles = {30.0, 270.0, -50.0, 451.5})
   void testSetOdometryInfo(double headingDegrees) {
-    physicalVision.setOdometryInfo(headingDegrees, 0, new Pose2d());
+    physicalVision.setOdometryInfo(headingDegrees, 0);
     physicalVision.checkAndUpdatePose(Limelight.FRONT_LEFT);
 
     assertEquals(

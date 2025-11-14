@@ -197,7 +197,7 @@ public class SimSwerve extends SimDriveTrain {
     Force propulsionForceY = Newtons.zero();
     Torque propulsionTorque = NewtonMeters.zero();
 
-    //
+    // sum up all the propulsion forces from each module
     for (final SimSwerveModule module : moduleSimulations) {
       final XY<Distance> forcePosition = XY.of(module.translation().rotateBy(chassisRotation));
       final XY<Force> propulsion = module.force(chassisRotation);

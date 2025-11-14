@@ -40,12 +40,14 @@ public abstract class DriveCommandBase extends Command {
     // Update the odometry information for the vision subsystem to use while filtering the vision
     // pose estimate
     vision.setOdometryInfo(
-        swerveDrive.getOdometryRotation2d().getDegrees(),
-        swerveDrive.getGyroRate(),
-        swerveDrive.getEstimatedPose());
+        swerveDrive.getOdometryRotation2d().getDegrees(), swerveDrive.getGyroRate());
     for (Limelight limelight : Limelight.values()) {
       addLimelightVisionMeasurement(limelight);
     }
+  }
+
+  private double scaleStandardDeviations(Limelight limelight, double standardDeviation) {
+    return limelight.hasInternalIMU() ? standardDeviation : standardDeviation * 1.5;
   }
 
   /**
@@ -73,12 +75,16 @@ public abstract class DriveCommandBase extends Command {
         double[] standardDeviations =
             oneAprilTagLookupTable.getLookupValue(distanceFromClosestAprilTag);
         swerveDrive.setPoseEstimatorVisionConfidence(
-            standardDeviations[0], standardDeviations[1], standardDeviations[2]);
+            scaleStandardDeviations(limelight, standardDeviations[0]),
+            scaleStandardDeviations(limelight, standardDeviations[1]),
+            scaleStandardDeviations(limelight, standardDeviations[2]));
       } else if (vision.getNumberOfAprilTags(limelight) > 1) {
         double[] standardDeviations =
             twoAprilTagLookupTable.getLookupValue(distanceFromClosestAprilTag);
         swerveDrive.setPoseEstimatorVisionConfidence(
-            standardDeviations[0], standardDeviations[1], standardDeviations[2]);
+            scaleStandardDeviations(limelight, standardDeviations[0]),
+            scaleStandardDeviations(limelight, standardDeviations[1]),
+            scaleStandardDeviations(limelight, standardDeviations[2]));
       }
 
       // Adds the timestamped pose gotten from the limelights to our pose estimation

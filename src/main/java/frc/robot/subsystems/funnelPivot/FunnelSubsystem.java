@@ -36,7 +36,8 @@ public class FunnelSubsystem extends SubsystemBase {
   public void periodic() {
     funnelPivotInterface.updateInputs(inputs);
     Logger.processInputs("FunnelPivotSubsystem/", inputs);
-
+    // Check for alerts
+    funnelPivotInterface.checkAlerts();
     // Update tunable numbers
     if (funnelP.hasChanged(hashCode())) {
       funnelPivotInterface.setPID(funnelP.get(), 0, 0);

@@ -2,13 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Constants {
-  private static RobotType robotType = RobotType.COMP_ROBOT;
+  private static RobotType robotType = RobotType.SIM_ROBOT;
 
   public static final boolean tuningMode = false;
 
@@ -90,7 +89,7 @@ public final class Constants {
     public static final double RIO_SIGNAL_FREQUENCY = 50;
     public static final double CANIVORE_SIGNAL_FREQUENCY = 250;
 
-    public static final String CANIVORE_CAN_BUS_STRING = "canivore 1";
+    public static final String CANIVORE_CAN_BUS_STRING = "carnivore 1";
     public static final String RIO_CAN_BUS_STRING = "rio";
 
     /**
@@ -98,7 +97,9 @@ public final class Constants {
      * It makes it very hard to do precise movements, so with this constant we set the threshold to
      * the lowest possible value.
      */
-    public static final double MIN_FALCON_DEADBAND = 0.001;
+    public static final double MIN_DUTY_CYCLE_DEADBAND = 0.001;
+
+    public static final double MIN_TORQUE_DEADBAND = 5.0;
 
     public static final int HIGH_THREAD_PRIORITY = 99;
     public static final int LOW_THREAD_PRIORITY = 1;
@@ -111,6 +112,9 @@ public final class Constants {
   public static final class FieldConstants {
     public static final double FIELD_LENGTH_METERS = Units.inchesToMeters(690);
     public static final double FIELD_WIDTH_METERS = Units.inchesToMeters(317);
+
+    public static final Translation2d FIELD_CENTER =
+        new Translation2d(FIELD_LENGTH_METERS / 2, FIELD_WIDTH_METERS / 2);
 
     public static final double REEF_LEVEL_ONE_Z = Units.inchesToMeters(18);
     public static final double REEF_LEVEL_TWO_Z = Units.inchesToMeters(31.875);
@@ -333,10 +337,21 @@ public final class Constants {
     public static final String X_ONE_METER_AUTO = "X-One-Meter-Test";
     public static final String BLUE_LEFT_TWO_CORAL_AUTO_ROUTINE =
         "Blue-Left-Two-Coral-Auto-Routine";
+    public static final String BLUE_MID_TWO_CORAL_AUTO_ROUTINE = "Blue-Mid-Two-Coral-Auto-Routine";
     public static final String BLUE_RIGHT_TWO_CORAL_AUTO_ROUTINE =
         "Blue-Right-Two-Coral-Auto-Routine";
-    public static final String BLUE_THREE_CORAL_AUTO_ROUTINE = "Blue-Three-Coral-Auto-Routine";
-    public static final String BLUE_FOUR_CORAL_AUTO_ROUTINE = "Blue-Four-Coral-Auto-Routine";
+    public static final String BLUE_LEFT_THREE_CORAL_AUTO_ROUTINE =
+        "Blue-Left-Three-Coral-Auto-Routine";
+    public static final String BLUE_MID_THREE_CORAL_AUTO_ROUTINE =
+        "Blue-Mid-Three-Coral-Auto-Routine";
+    public static final String BLUE_RIGHT_THREE_CORAL_AUTO_ROUTINE =
+        "Blue-Right-Three-Coral-Auto-Routine";
+    public static final String BLUE_LEFT_FOUR_CORAL_AUTO_ROUTINE =
+        "Blue-Left-Four-Coral-Auto-Routine";
+    public static final String BLUE_MID_FOUR_CORAL_AUTO_ROUTINE =
+        "Blue-Mid-Four-Coral-Auto-Routine";
+    public static final String BLUE_RIGHT_FOUR_CORAL_AUTO_ROUTINE =
+        "Blue-Right-Four-Coral-Auto-Routine";
     public static final String SIMPLE_REPULSOR_AUTO = "Simple-Repulsor-Auto";
     public static final String TWO_CORAL_REPULSOR_AUTO = "Two-Coral-Repulsor-Auto";
     // This does not exist yet :(
@@ -441,11 +456,21 @@ public final class Constants {
         "BlueTrajectories/Left-Pickup-to-B";
 
     // Different Pre-defined Auto Routines
-    public static final String RED_LEFT_TWO_CORAL_AUTO_ROUTINE = "Red-Left-Two-Coral-Auto-Routine";
     public static final String RED_RIGHT_TWO_CORAL_AUTO_ROUTINE =
         "Red-Right-Two-Coral-Auto-Routine";
-    public static final String RED_THREE_CORAL_AUTO_ROUTINE = "Red-Three-Coral-Auto-Routine";
-    public static final String RED_FOUR_CORAL_AUTO_ROUTINE = "Red-Four-Coral-Auto-Routine";
+    public static final String RED_MID_TWO_CORAL_AUTO_ROUTINE = "Red-Mid-Two-Coral-Auto-Routine";
+    public static final String RED_LEFT_TWO_CORAL_AUTO_ROUTINE = "Red-Left-Two-Coral-Auto-Routine";
+    public static final String RED_RIGHT_THREE_CORAL_AUTO_ROUTINE =
+        "Red-Right-Three-Coral-Auto-Routine";
+    public static final String RED_MID_THREE_CORAL_AUTO_ROUTINE =
+        "Red-Mid-Three-Coral-Auto-Routine";
+    public static final String RED_LEFT_THREE_CORAL_AUTO_ROUTINE =
+        "Red-Left-Three-Coral-Auto-Routine";
+    public static final String RED_RIGHT_FOUR_CORAL_AUTO_ROUTINE =
+        "Red-Right-Four-Coral-Auto-Routine";
+    public static final String RED_MID_FOUR_CORAL_AUTO_ROUTINE = "Red-Mid-Four-Coral-Auto-Routine";
+    public static final String RED_LEFT_FOUR_CORAL_AUTO_ROUTINE =
+        "Red-Left-Four-Coral-Auto-Routine";
     public static final Pose2d BLUE_LEFT_CORAL_STATION =
         new Pose2d(
             Units.inchesToMeters(33.51),
@@ -513,44 +538,6 @@ public final class Constants {
     public static final String RED_LEFT_PICKUP_TO_L_TRAJECTORY = "RedTrajectories/Left-Pickup-to-L";
     public static final String RED_LEFT_PICKUP_TO_A_TRAJECTORY = "RedTrajectories/Left-Pickup-to-A";
     public static final String RED_LEFT_PICKUP_TO_B_TRAJECTORY = "RedTrajectories/Left-Pickup-to-B";
-
-    // Auto Align Constants
-    public static final double AUTO_ALIGN_TRANSLATION_DEADBAND_AMOUNT = 0.01;
-    public static final double AUTO_ALIGN_ROTATION_DEADBAND_AMOUNT = .5;
-    public static final double AUTO_ALIGN_ROTATION_P = 15.0;
-    public static final double AUTO_ALIGN_ROTATION_I = 0;
-    public static final double AUTO_ALIGN_ROTATION_D = 0;
-    public static final Constraints AUTO_ALIGN_ROTATION_CONSTRAINTS =
-        new Constraints(4 * Math.PI, 6 * Math.PI);
-    public static final double AUTO_ALIGN_TRANSLATION_P = 12;
-    public static final double AUTO_ALIGN_TRANSLATION_I = 0;
-    public static final double AUTO_ALIGN_TRANSLATION_D = 0;
-    public static final Constraints AUTO_ALIGN_TRANSLATION_CONSTRAINTS = new Constraints(4, 5);
-    public static final double AUTO_ALIGN_ACCEPTABLE_ERROR = 0.01;
-    // Choreo Drive Constants
-    public static final double MAX_AUTO_SPEED_METERS_PER_SECOND = 4.5;
-    public static final double MAX_AUTO_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.25;
-    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
-    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
-
-    public static final double CHOREO_AUTO_TRANSLATION_P = .25;
-    public static final double CHOREO_AUTO_TRANSLATION_I = 0;
-    public static final double CHOREO_AUTO_TRANSLATION_D = 0.0;
-
-    public static final double CHOREO_AUTO_THETA_P = 0.0;
-    public static final double CHOREO_AUTO_THETA_I = 0;
-    public static final double CHOREO_AUTO_THETA_D = 0;
-
-    public static final double CHOREO_AUTO_ACCEPTABLE_TRANSLATION_TOLERANCE_METERS = 0.0005;
-    public static final double CHOREO_AUTO_ACCEPTABLE_ROTATION_TOLERANCE_RADIANS = 0.001;
-
-    public static final TrapezoidProfile.Constraints CHOREO_AUTO_TRANSLATION_CONSTRAINTS =
-        new TrapezoidProfile.Constraints(
-            MAX_AUTO_SPEED_METERS_PER_SECOND, MAX_AUTO_ACCELERATION_METERS_PER_SECOND_SQUARED);
-
-    public static final TrapezoidProfile.Constraints CHOREO_AUTO_THETA_CONTROLLER_CONSTRAINTS =
-        new TrapezoidProfile.Constraints(
-            MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
   }
 
   public static final class JoystickConstants {

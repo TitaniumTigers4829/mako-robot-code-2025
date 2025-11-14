@@ -22,7 +22,7 @@ public class SimulatedGyro implements GyroInterface {
 
   @Override
   public void updateInputs(GyroInputs inputs) {
-    inputs.isConnected = false;
+    inputs.isConnected = true;
     inputs.yawDegrees = -yawRads;
     inputs.yawVelocityDegreesPerSecond = -yawVelRadsPerSec;
     inputs.accelX = accelX;

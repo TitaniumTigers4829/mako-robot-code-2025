@@ -96,7 +96,7 @@ public class SimRobot<DrvTrn extends SimDriveTrain> {
    */
   public SimIntake createIntake(
       Rectangle2d boundingBox, GamePieceVariant... acceptedGamePieceVariants) {
-    var intake =
+    SimIntake intake =
         new SimIntake(
             driveTrain,
             gamePieceStorage,

@@ -23,7 +23,9 @@ public class SwerveModule {
   private final String moduleName;
   private final ModuleInputsAutoLogged moduleInputs = new ModuleInputsAutoLogged();
 
-  private final Alert hardwareFaultAlert;
+  private final Alert driveFaultAlert;
+  private final Alert encoderFaultAlert;
+  private final Alert turnFaultAlert;
 
   private static final LoggedTunableNumber driveS = new LoggedTunableNumber("Drive/Module/DriveS");
   private static final LoggedTunableNumber driveV = new LoggedTunableNumber("Drive/Module/DriveV");
@@ -56,9 +58,15 @@ public class SwerveModule {
   public SwerveModule(ModuleInterface moduleInterface, String moduleName) {
     this.moduleInterface = moduleInterface;
     this.moduleName = moduleName;
-    this.hardwareFaultAlert =
-        new Alert("Module-" + moduleName + " Hardware Fault", AlertType.kError);
-    this.hardwareFaultAlert.set(false);
+    this.driveFaultAlert = new Alert("Drive-" + moduleName + " Hardware Fault", AlertType.kError);
+    this.driveFaultAlert.set(false);
+
+    this.encoderFaultAlert =
+        new Alert("Encoder-" + moduleName + " Hardware Fault", AlertType.kError);
+    this.encoderFaultAlert.set(false);
+
+    this.turnFaultAlert = new Alert("Turn-" + moduleName + " Hardware Fault", AlertType.kError);
+    this.turnFaultAlert.set(false);
   }
 
   /** Updates the module's odometry inputs. */
@@ -66,7 +74,9 @@ public class SwerveModule {
     moduleInterface.updateInputs(moduleInputs);
     Logger.processInputs("Drive/Module-" + moduleName, moduleInputs);
     Tracer.traceFunc("Module-" + moduleName, () -> moduleInterface.updateInputs(moduleInputs));
-    this.hardwareFaultAlert.set(!moduleInputs.isConnected);
+    this.driveFaultAlert.set(!moduleInputs.isDriveConnected);
+    this.encoderFaultAlert.set(!moduleInputs.isEncoderConnected);
+    this.turnFaultAlert.set(!moduleInputs.isTurnConnected);
   }
 
   /**
@@ -119,6 +129,7 @@ public class SwerveModule {
     if (state.speedMetersPerSecond < 0.01) {
       moduleInterface.stopModule();
     }
+
     moduleInterface.setDesiredState(state);
     Logger.recordOutput("Drive/desired turn angle", state.angle.getRotations());
   }
@@ -134,7 +145,7 @@ public class SwerveModule {
    * @return the turn angle of the module 0 being forward, CCW being positive
    */
   public Rotation2d getTurnRotation() {
-    return moduleInputs.turnAbsolutePosition;
+    return Rotation2d.fromRotations(moduleInputs.turnAbsolutePosition);
   }
 
   /**
@@ -169,6 +180,11 @@ public class SwerveModule {
     return moduleInterface.getDrivePositionRadians();
   }
 
+  /**
+   * Gets the measured state of the module, which includes the drive velocity and turn rotation.
+   *
+   * @return a SwerveModuleState object containing the drive velocity and turn rotation
+   */
   public SwerveModuleState getMeasuredState() {
     return new SwerveModuleState(getDriveVelocityMetersPerSec(), getTurnRotation());
   }

@@ -11,9 +11,9 @@ import org.photonvision.PhotonCamera;
 public final class VisionConstants {
   public enum Limelight {
     FRONT_LEFT(
-        FRONT_LEFT_LIMELIGHT_NUMBER, FRONT_LEFT_LIMELIGHT_NAME, LL3G_FOV_MARGIN_OF_ERROR, false),
+        FRONT_LEFT_LIMELIGHT_NUMBER, FRONT_LEFT_LIMELIGHT_NAME, LL4_FOV_MARGIN_OF_ERROR, true),
     FRONT_RIGHT(
-        FRONT_RIGHT_LIMELIGHT_NUMBER, FRONT_RIGHT_LIMELIGHT_NAME, LL4_FOV_MARGIN_OF_ERROR, true);
+        FRONT_RIGHT_LIMELIGHT_NUMBER, FRONT_RIGHT_LIMELIGHT_NAME, LL3G_FOV_MARGIN_OF_ERROR, false);
 
     private final int id;
     private final String name;
@@ -53,19 +53,11 @@ public final class VisionConstants {
   }
 
   public static final Transform3d BACK_TRANSFORM =
-      new Transform3d(
-          new Translation3d(-0.3119324724, 0.0, 0.1865472012), new Rotation3d(0.0, 35, 180.0));
-  public static final Transform3d FRONT_LEFT_TRANSFORM =
-      new Transform3d(
-          new Translation3d(0.2749477356, -0.269958439, 0.2318054546), new Rotation3d(0.0, 25, 35));
-  public static final Transform3d FRONT_RIGHT_TRANSFORM =
-      new Transform3d(
-          new Translation3d(0.2816630892, 0.2724405524, 0.232156), new Rotation3d(0.0, 25, -35));
-  public static final Transform3d ELEVATOR_TRANSFORM = new Transform3d();
-
+      new Transform3d(new Translation3d(0.0, 0.0, 0.1865472012), new Rotation3d(0.0, 35, 180.0));
+  // x->0.3119324724
   public static final PhotonCamera BACK_CAMERA = new PhotonCamera(Limelight.FRONT_LEFT.getName());
-  public static final PhotonCamera ELEVATOR_CAMERA =
-      new PhotonCamera(Limelight.FRONT_RIGHT.getName());
+  // public static final PhotonCamera ELEVATOR_CAMERA =
+  //     new PhotonCamera(Limelight.FRONT_RIGHT.getName());
 
   public static final int THREAD_SLEEP_MS = 20;
 
@@ -92,9 +84,9 @@ public final class VisionConstants {
   public static final double MEGA_TAG_TRANSLATION_DISCREPANCY_THRESHOLD = .5; // TODO: tune
   public static final double MEGA_TAG_ROTATION_DISCREPANCY_THREASHOLD = 45;
 
-  public static final String FRONT_LEFT_LIMELIGHT_NAME = "limelight-shooter";
+  public static final String FRONT_LEFT_LIMELIGHT_NAME = "limelight-left";
   public static final int FRONT_LEFT_LIMELIGHT_NUMBER = 0;
-  public static final String FRONT_RIGHT_LIMELIGHT_NAME = "limelight-elevate";
+  public static final String FRONT_RIGHT_LIMELIGHT_NAME = "limelight-right";
   public static final int FRONT_RIGHT_LIMELIGHT_NUMBER = 1;
 
   // TODO: these need to be changed, maybe to 10 and 0?

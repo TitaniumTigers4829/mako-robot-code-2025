@@ -13,13 +13,13 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 /** This */
-public class ClimbPivot extends SubsystemBase {
+public class ClimbPivotSubsystem extends SubsystemBase {
   /** Creates a new ClimbPivot. */
   ClimbPivotInterface climbPivotInterface;
 
   ClimbPivotInputsAutoLogged inputsAutoLogged = new ClimbPivotInputsAutoLogged();
 
-  public ClimbPivot(ClimbPivotInterface climbPivotInterface) {
+  public ClimbPivotSubsystem(ClimbPivotInterface climbPivotInterface) {
     this.climbPivotInterface = climbPivotInterface;
   }
 

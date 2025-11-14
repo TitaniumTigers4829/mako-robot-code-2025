@@ -14,6 +14,8 @@ public interface GyroInterface {
     public double pitchDegrees = 0.0;
     public double accelX = 0.0;
     public double accelY = 0.0;
+    public double rollVelocityDegreesPerSecond = 0.0;
+    public double pitchVelocityDegreesPerSecond = 0.0;
   }
 
   /**

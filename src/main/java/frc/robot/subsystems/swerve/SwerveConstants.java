@@ -4,6 +4,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotType;
@@ -23,13 +24,13 @@ public class SwerveConstants {
     // the robot
     // Distance between centers of right and left wheels on robot
     public static final double TRACK_WIDTH =
-        Constants.getRobot() == RobotType.DEV_ROBOT
-            ? Units.inchesToMeters(22)
+        Constants.getRobot() == RobotType.COMP_ROBOT
+            ? Units.inchesToMeters(23)
             : Units.inchesToMeters(21.25);
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE =
-        Constants.getRobot() == RobotType.DEV_ROBOT
-            ? Units.inchesToMeters(22)
+        Constants.getRobot() == RobotType.COMP_ROBOT
+            ? Units.inchesToMeters(23)
             : Units.inchesToMeters(21.25);
     public static final double DRIVE_BASE_DIAMETER =
         Math.sqrt(Math.pow(DriveConstants.TRACK_WIDTH, 2) + Math.pow(DriveConstants.WHEEL_BASE, 2));
@@ -44,6 +45,8 @@ public class SwerveConstants {
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS =
         new SwerveDriveKinematics(MODULE_TRANSLATIONS);
+
+    public static final int PIGEON_ID = 0;
 
     public static final class AquilaConstants {
       public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 22;
@@ -144,25 +147,28 @@ public class SwerveConstants {
     }
 
     public static final class CompConstants {
-      public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
-      public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 2;
-      public static final int REAR_LEFT_DRIVE_MOTOR_ID = 3;
-      public static final int REAR_RIGHT_DRIVE_MOTOR_ID = 4;
+      public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 54;
+      public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 26;
+      public static final int REAR_LEFT_DRIVE_MOTOR_ID = 1;
+      public static final int REAR_RIGHT_DRIVE_MOTOR_ID = 3;
 
-      public static final int FRONT_LEFT_TURN_MOTOR_ID = 5;
-      public static final int FRONT_RIGHT_TURN_MOTOR_ID = 6;
-      public static final int REAR_LEFT_TURN_MOTOR_ID = 7;
-      public static final int REAR_RIGHT_TURN_MOTOR_ID = 8;
+      public static final int FRONT_LEFT_TURN_MOTOR_ID = 7;
+      public static final int FRONT_RIGHT_TURN_MOTOR_ID = 5;
+      public static final int REAR_LEFT_TURN_MOTOR_ID = 6;
+      public static final int REAR_RIGHT_TURN_MOTOR_ID = 2;
 
-      public static final int FRONT_LEFT_CANCODER_ID = 9;
-      public static final int FRONT_RIGHT_CANCODER_ID = 10;
-      public static final int REAR_LEFT_CANCODER_ID = 11;
-      public static final int REAR_RIGHT_CANCODER_ID = 12;
+      public static final int FRONT_LEFT_CANCODER_ID = 5;
+      public static final int FRONT_RIGHT_CANCODER_ID = 2;
+      public static final int REAR_LEFT_CANCODER_ID = 0;
+      public static final int REAR_RIGHT_CANCODER_ID = 1;
 
-      public static final double FRONT_LEFT_ZERO_ANGLE = -0.09521484375;
-      public static final double FRONT_RIGHT_ZERO_ANGLE = -0.478271484375;
-      public static final double REAR_LEFT_ZERO_ANGLE = -0.318115234375;
-      public static final double REAR_RIGHT_ZERO_ANGLE = -0.473388671875;
+      public static final double FRONT_LEFT_ZERO_ANGLE =
+          -0.256103515625 + Units.degreesToRotations(45);
+      public static final double FRONT_RIGHT_ZERO_ANGLE =
+          0.112548828125 - Units.degreesToRotations(45);
+      public static final double REAR_LEFT_ZERO_ANGLE = 0.4765625 - Units.degreesToRotations(45);
+      public static final double REAR_RIGHT_ZERO_ANGLE =
+          0.136474609375 + Units.degreesToRotations(45);
 
       public static final SensorDirectionValue FRONT_LEFT_CANCODER_REVERSED =
           SensorDirectionValue.CounterClockwise_Positive;
@@ -183,20 +189,52 @@ public class SwerveConstants {
           InvertedValue.CounterClockwise_Positive;
 
       public static final InvertedValue FRONT_LEFT_DRIVE_ENCODER_REVERSED =
-          InvertedValue.CounterClockwise_Positive;
+          InvertedValue.Clockwise_Positive;
       public static final InvertedValue FRONT_RIGHT_DRIVE_ENCODER_REVERSED =
-          InvertedValue.Clockwise_Positive;
-      public static final InvertedValue REAR_LEFT_DRIVE_ENCODER_REVERSED =
           InvertedValue.CounterClockwise_Positive;
-      public static final InvertedValue REAR_RIGHT_DRIVE_ENCODER_REVERSED =
+      public static final InvertedValue REAR_LEFT_DRIVE_ENCODER_REVERSED =
           InvertedValue.Clockwise_Positive;
+      public static final InvertedValue REAR_RIGHT_DRIVE_ENCODER_REVERSED =
+          InvertedValue.CounterClockwise_Positive;
     }
 
-    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 20;
+    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 10; // 20
     public static final double LOW_ANGULAR_SPEED_RADIANS_PER_SECOND = 5;
 
-    public static final double MAX_SPEED_METERS_PER_SECOND =
-        Constants.getRobot() == RobotType.DEV_ROBOT ? 4.5 : 6.95; // 4.5
+    public static final double MAX_SPEED_METERS_PER_SECOND = 2; // 4.85
+    // Constants.getRobot() == RobotType.DEV_ROBOT ? 4.5 : 6.95; // 4.5
+
+    public static final double REPULSOR_TRANSLATION_P = 2.5;
+    public static final double REPULSOR_HEADING_P = 2.5;
+
+    public static final double REPULSOR_MAX_VELOCITY = 1.0;
+    public static final double REPULSOR_MAX_ACCELERATION = 2.0;
+
+    // Choreo Drive Constants
+    public static final double AUTO_MAX_SPEED_METERS_PER_SECOND = 4.5;
+    public static final double AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.25;
+    public static final double AUTO_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 4 * Math.PI;
+    public static final double AUTO_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = 6 * Math.PI;
+
+    public static final double AUTO_TRANSLATION_P = 1.0; // 1
+    public static final double AUTO_TRANSLATION_I = 0;
+    public static final double AUTO_TRANSLATION_D = 0.0;
+
+    public static final double AUTO_THETA_P = 0.0; // 5
+    public static final double AUTO_THETA_I = 0;
+    public static final double AUTO_THETA_D = 0;
+
+    public static final double AUTO_TRANSLATION_TOLERANCE_METERS = 0.0005;
+    public static final double AUTO_ROTATION_TOLERANCE_RADIANS = 0.001;
+
+    public static final TrapezoidProfile.Constraints AUTO_TRANSLATION_CONSTRAINTS =
+        new TrapezoidProfile.Constraints(
+            AUTO_MAX_SPEED_METERS_PER_SECOND, AUTO_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+
+    public static final TrapezoidProfile.Constraints AUTO_THETA_CONTROLLER_CONSTRAINTS =
+        new TrapezoidProfile.Constraints(
+            AUTO_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND,
+            AUTO_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
   }
 
   public class ModuleConstants {
@@ -224,16 +262,16 @@ public class SwerveConstants {
     public static final double TURN_V = 0.0;
     public static final double TURN_A = 0.0;
 
-    public static final double MAX_ANGULAR_SPEED_ROTATIONS_PER_SECOND = 30;
-    public static final double MAX_ANGULAR_ACCELERATION_ROTATIONS_PER_SECOND_SQUARED = 24;
+    public static final double MAX_ANGULAR_SPEED_ROTATIONS_PER_SECOND = 15;
+    public static final double MAX_ANGULAR_ACCELERATION_ROTATIONS_PER_SECOND_SQUARED = 12;
 
-    public static final double DRIVE_P = 6.0;
+    public static final double DRIVE_P = .5;
     public static final double DRIVE_I = 0.0;
     public static final double DRIVE_D = 0.0;
 
     // These values were characterized using our characterization commands.
-    public static final double DRIVE_S = .151315113225759;
-    public static final double DRIVE_V = 0.272854272591;
+    public static final double DRIVE_S = 3.0;
+    public static final double DRIVE_V = 0.6;
     public static final double DRIVE_A = 0.0;
   }
 

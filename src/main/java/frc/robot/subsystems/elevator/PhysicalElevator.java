@@ -8,7 +8,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
@@ -29,11 +28,9 @@ public class PhysicalElevator implements ElevatorInterface {
 
   private final MotionMagicVoltage mmPositionRequest = new MotionMagicVoltage(0.0);
   private final DutyCycleOut dutyCyleOut = new DutyCycleOut(0.0);
-  private final Follower follower;
 
   private final MotionMagicTorqueCurrentFOC mmTorqueRequest = new MotionMagicTorqueCurrentFOC(0.0);
   private final TorqueCurrentFOC currentOut = new TorqueCurrentFOC(0.0);
-
   private final StatusSignal<Angle> leaderPosition;
   private final StatusSignal<Angle> followerPosition;
   private final StatusSignal<Voltage> leaderAppliedVoltage;
@@ -52,18 +49,19 @@ public class PhysicalElevator implements ElevatorInterface {
 
   /** Creates a new PhysicalElevator. */
   public PhysicalElevator() {
-    follower = new Follower(leaderMotor.getDeviceID(), true);
+    // Create elevator config
+
+    // Static gravity compensation
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
     // Limits
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ElevatorConstants.REVERSE_LIMIT;
-    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable =
-        ElevatorConstants.REVRESE_LIMIT_ENABLE;
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ElevatorConstants.LIMIT;
-    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = ElevatorConstants.LIMIT_ENABLE;
 
+    // Motor neutral output is Brake mode
     elevatorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
+    // Set current limits
     elevatorConfig.CurrentLimits.StatorCurrentLimit = ElevatorConstants.STATOR_CURRENT_LIMIT;
     elevatorConfig.CurrentLimits.SupplyCurrentLimit = ElevatorConstants.SUPPLY_CURRENT_LIMIT;
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable =
@@ -71,18 +69,20 @@ public class PhysicalElevator implements ElevatorInterface {
     elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable =
         ElevatorConstants.SUPPLY_CURRENT_LIMIT_ENABLE;
 
+    // Set inverted
     elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    // configuration
     elevatorConfig.MotionMagic.MotionMagicAcceleration =
         ElevatorConstants.MOTION_MAGIC_MAX_ACCELERATION;
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity =
         ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY;
 
+    // Set gearing
     elevatorConfig.Feedback.SensorToMechanismRatio = ElevatorConstants.ELEVATOR_GEAR_RATIO;
 
     leaderMotor.getConfigurator().apply(elevatorConfig);
-    followerMotor.setControl(follower);
-    // elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+    // Use Follower control
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     followerMotor.getConfigurator().apply(elevatorConfig);
 
     leaderPosition = leaderMotor.getPosition();
@@ -118,8 +118,8 @@ public class PhysicalElevator implements ElevatorInterface {
         leaderVelocity,
         followerTemp,
         leaderTemp);
-    leaderMotor.optimizeBusUtilization();
     followerMotor.optimizeBusUtilization();
+    leaderMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -162,13 +162,23 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void setElevatorPosition(double position) {
     leaderMotor.setControl(mmPositionRequest.withPosition(position));
-    // followerMotor.setControl(mmPositionRequest.withPosition(position));
+    followerMotor.setControl(mmPositionRequest.withPosition(-position));
   }
+
+  // @Override
+  // public void hardStop() {
+  //   if (leaderStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD
+  //       && followerStatorCurrent.getValueAsDouble() > ElevatorConstants.STATOR_CURRENT_THRESHOLD)
+  // {
+  //     leaderMotor.setControl(mmPositionRequest.withPosition(-0.001));
+  //     followerMotor.setControl(mmPositionRequest.withPosition(0.001));
+  //   }
+  // }
 
   @Override
   public void setVolts(double volts) {
     leaderMotor.setVoltage(-volts);
-    // followerMotor.setVoltage(-volts);
+    followerMotor.setVoltage(volts);
   }
 
   @Override
@@ -179,13 +189,13 @@ public class PhysicalElevator implements ElevatorInterface {
   @Override
   public void openLoop(double output) {
     leaderMotor.setControl(dutyCyleOut.withOutput(output));
-    // followerMotor.setControl(dutyCyleOut.withOutput(output));
+    followerMotor.setControl(dutyCyleOut.withOutput(-output));
   }
 
   @Override
   public void resetElevatorPosition(double position) {
     leaderMotor.setPosition(position);
-    // followerMotor.setPosition(position);
+    followerMotor.setPosition(position);
   }
 
   @Override
@@ -193,7 +203,6 @@ public class PhysicalElevator implements ElevatorInterface {
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
     leaderMotor.getConfigurator().apply(elevatorConfig);
-    followerMotor.getConfigurator().apply(elevatorConfig);
   }
 
   @Override

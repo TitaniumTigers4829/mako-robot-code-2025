@@ -41,7 +41,7 @@ public class PhysicalCoralIntake implements CoralIntakeInterface {
 
     intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    intakeConfig.MotorOutput.DutyCycleNeutralDeadband = HardwareConstants.MIN_FALCON_DEADBAND;
+    intakeConfig.MotorOutput.DutyCycleNeutralDeadband = HardwareConstants.MIN_DUTY_CYCLE_DEADBAND;
 
     intakeConfig.CurrentLimits.StatorCurrentLimit = CoralIntakeConstants.INTAKE_STATOR_LIMIT;
     intakeConfig.CurrentLimits.StatorCurrentLimitEnable =
@@ -121,6 +121,16 @@ public class PhysicalCoralIntake implements CoralIntakeInterface {
   @Override
   public void setIntakeVelocity(double velocity) {
     coralIntakeMotor.setControl(velocityVoltage.withVelocity(velocity / 60.0));
+  }
+
+  @Override
+  public boolean hasCoral() {
+    return !innerCoralSensor.get();
+  }
+
+  @Override
+  public boolean hasControl() {
+    return !outerCoralSensor.get();
   }
 
   @Override
