@@ -27,11 +27,11 @@ public class AutoAlignReef extends DriveCommandBase {
   private final Consumer<Boolean> isAligned;
 
   private ProfiledPIDController xTranslationController =
-      new ProfiledPIDController(7.0, 0, 0.29, new Constraints(.75, 2)); // 2
+      new ProfiledPIDController(3.0, 0, 0.75, new Constraints(.75, 2)); // 2
   private ProfiledPIDController yTranslationController =
-      new ProfiledPIDController(7.0, 0, 0.29, new Constraints(.75, 2));
+      new ProfiledPIDController(3.0, 0, 0.5, new Constraints(.75, 2));
   private ProfiledPIDController rotationController =
-      new ProfiledPIDController(4.8, 0, 0.29, new Constraints(2, 4));
+      new ProfiledPIDController(2.0, 0, 0.2, new Constraints(2, 4));
 
   /** Creates a new AutoAlignReef. */
   public AutoAlignReef(

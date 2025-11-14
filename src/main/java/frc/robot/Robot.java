@@ -68,7 +68,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
+
 
   private VisionSubsystem visionSubsystem;
   private SwerveDrive swerveDrive;
@@ -138,7 +138,7 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     DriverStation.silenceJoystickConnectionWarning(true);
     configureDriverController();
-    configureOperatorController();
+    configuredriverController();
   }
 
   /**
@@ -149,10 +149,10 @@ public class Robot extends LoggedRobot {
   private void alignCallback(boolean isAligned) {
     if (isAligned) {
       driverController.setRumble(RumbleType.kBothRumble, 0.5);
-      operatorController.setRumble(RumbleType.kBothRumble, 0.5);
+      
     } else {
       driverController.setRumble(RumbleType.kBothRumble, 0.0);
-      operatorController.setRumble(RumbleType.kBothRumble, 0.0);
+      
     }
   }
 
@@ -224,28 +224,28 @@ public class Robot extends LoggedRobot {
   }
 
   /** Configures the operator controller buttons and axes to control the robot */
-  private void configureOperatorController() {
+  private void configuredriverController() {
     // ELEVATOR COMMANDS
     // Toggle the elevator limits
-    operatorController.povLeft().onTrue(new InstantCommand(elevatorSubsystem::toggleLimits));
+    driverController.povLeft().onTrue(new InstantCommand(elevatorSubsystem::toggleLimits));
 
     // Manual elevator control
-    operatorController
+    driverController
         .rightBumper()
         .whileTrue(
             elevatorSubsystem
-                .manualElevator(() -> -operatorController.getLeftY())
+                .manualElevator(() -> -driverController.getLeftY())
                 .onlyIf(
                     () ->
                         (coralIntakeSubsystem.isIntakeComplete()
                             || coralIntakeSubsystem.isIntakeIdle())));
 
     // Zero the elevator position
-    operatorController
-        .rightTrigger()
+    driverController
+        .povDown()
         .onTrue(Commands.runOnce(() -> elevatorSubsystem.resetPosition(0.0), elevatorSubsystem));
     // Sets the elevator to L1 position
-    operatorController
+    driverController
         .a()
         .whileTrue(
             new SetElevatorPosition(elevatorSubsystem, ElevatorSetpoints.L1.getPosition())
@@ -254,16 +254,16 @@ public class Robot extends LoggedRobot {
                         (coralIntakeSubsystem.isIntakeComplete()
                             || coralIntakeSubsystem.isIntakeIdle())));
     // Sets the elevator to L2 position
-    operatorController
-        .x()
-        .whileTrue(
-            new SetElevatorPosition(elevatorSubsystem, ElevatorSetpoints.L2.getPosition())
-                .onlyIf(
-                    () ->
-                        (coralIntakeSubsystem.isIntakeComplete()
-                            || coralIntakeSubsystem.isIntakeIdle())));
+    // driverController
+    //     .x()
+    //   .whileTrue(
+    //         new SetElevatorPosition(elevatorSubsystem, ElevatorSetpoints.L2.getPosition())
+    //             .onlyIf(
+    //                 () ->
+    //                     (coralIntakeSubsystem.isIntakeComplete()
+    //                         || coralIntakeSubsystem.isIntakeIdle())));
     // Sets the elevator to L3 position
-    operatorController
+    driverController
         .b()
         .whileTrue(
             new SetElevatorPosition(elevatorSubsystem, ElevatorSetpoints.L3.getPosition())
@@ -272,7 +272,7 @@ public class Robot extends LoggedRobot {
                         (coralIntakeSubsystem.isIntakeComplete()
                             || coralIntakeSubsystem.isIntakeIdle())));
     // Sets the elevator to L4 position
-    operatorController
+    driverController
         .y()
         .whileTrue(
             new SetElevatorPosition(elevatorSubsystem, ElevatorSetpoints.L4.getPosition())
@@ -282,25 +282,25 @@ public class Robot extends LoggedRobot {
                             || coralIntakeSubsystem.isIntakeIdle())));
     // INTAKE COMMANDS
     // Reverse intake command
-    operatorController
-        .povRight()
-        .whileTrue(
-            Commands.runEnd(
-                    () ->
-                        coralIntakeSubsystem.setIntakeVelocity(
-                            CoralIntakeConstants.REVERSE_INTAKE_SPEED + -1800),
-                    () ->
-                        coralIntakeSubsystem.setIntakeVelocity(
-                            CoralIntakeConstants.NEUTRAL_INTAKE_SPEED),
-                    coralIntakeSubsystem)
-                .andThen(
-                    Commands.runOnce(
-                        () -> coralIntakeSubsystem.setIntakeState(IntakeState.IDLE),
-                        coralIntakeSubsystem)));
+    // driverController
+    //     .povRight()
+    //     .whileTrue(
+    //         Commands.runEnd(
+    //                 () ->
+    //                     coralIntakeSubsystem.setIntakeVelocity(
+    //                         CoralIntakeConstants.REVERSE_INTAKE_SPEED + -1800),
+    //                 () ->
+    //                     coralIntakeSubsystem.setIntakeVelocity(
+    //                         CoralIntakeConstants.NEUTRAL_INTAKE_SPEED),
+    //                 coralIntakeSubsystem)
+    //             .andThen(
+    //                 Commands.runOnce(
+    //                     () -> coralIntakeSubsystem.setIntakeState(IntakeState.IDLE),
+    //                     coralIntakeSubsystem)));
 
     // Eject command
-    operatorController
-        .leftTrigger()
+    driverController
+        .povUp()
         .whileTrue(
             Commands.runEnd(
                     () -> coralIntakeSubsystem.setIntakeVelocity(CoralIntakeConstants.EJECT_SPEED),
@@ -314,7 +314,7 @@ public class Robot extends LoggedRobot {
                         coralIntakeSubsystem)));
 
     // Intake command
-    operatorController
+    driverController
         .leftBumper()
         .whileTrue(
             Commands.sequence(
@@ -327,18 +327,18 @@ public class Robot extends LoggedRobot {
 
     // OTHER COMMANDS
     // Manual climb control
-    operatorController
-        .povUp()
-        .whileTrue(
-            climbPivotSubsystem.manualPivotClimb(
-                () -> JoystickUtil.modifyAxis(() -> operatorController.getLeftY(), 2)));
+    //driverController
+        //.povUp()
+        //.whileTrue(
+            //climbPivotSubsystem.manualPivotClimb(
+                //() -> JoystickUtil.modifyAxis(() -> driverController.getLeftY(), 2)));
 
     // Manual funnel control
-    operatorController
-        .povDown()
-        .whileTrue(
-            funnelSubsystem.manualFunnel(
-                () -> JoystickUtil.modifyAxis(() -> operatorController.getLeftY(), 2)));
+    //driverController
+    //    .povDown()
+    //    .whileTrue(
+     //       funnelSubsystem.manualFunnel(
+     //           () -> JoystickUtil.modifyAxis(() -> driverController.getLeftY(), 2)));
   }
 
   /** Checks the git status and records it to the log */
