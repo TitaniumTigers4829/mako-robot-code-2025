@@ -1,8 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import com.titaniumtigers4829.utils.NTUtils;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.networktables.NetworkTable;
-import frc.robot.extras.vision.TigerHelpers;
 import frc.robot.subsystems.vision.VisionConstants.Limelight;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,7 +164,8 @@ public class SimulatedVision extends PhysicalVision {
    */
   private NetworkTable getLimelightTable(Limelight limelight) {
     return switch (limelight) {
-      case FRONT_LEFT -> TigerHelpers.getLimelightNetworkTable(Limelight.FRONT_LEFT.getName());
+      case FRONT_LEFT -> NTUtils.getLimelightNetworkTable(Limelight.FRONT_LEFT.getName());
+      case FRONT_RIGHT -> NTUtils.getLimelightNetworkTable(Limelight.FRONT_RIGHT.getName());
       default -> throw new IllegalArgumentException("Invalid limelight " + limelight);
     };
   }
