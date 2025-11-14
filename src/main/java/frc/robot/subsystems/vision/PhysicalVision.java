@@ -123,7 +123,13 @@ public class PhysicalVision implements VisionInterface {
 
   @Override
   public double getAmbiguity(Limelight limelight) {
-    return limelightEstimates.get(limelight.getId()).rawFiducials()[getNumberOfAprilTags(limelight) - 1].ambiguity();
+    // If no april tags are seen, return -1 for ambiguity
+    return limelightEstimates.length() == 0
+        ? -1
+        : limelightEstimates
+            .get(limelight.getId())
+            .rawFiducials()[getNumberOfAprilTags(limelight) - 1]
+            .ambiguity();
   }
 
   @Override
@@ -154,12 +160,10 @@ public class PhysicalVision implements VisionInterface {
                 megatag2Estimate.pose())
             || getLimelightAprilTagDistance(limelight)
                 > VisionConstants.MEGA_TAG_2_DISTANCE_THRESHOLD)) {
-      limelightEstimates.set(
-          limelight.getId(), megatag2Estimate);
+      limelightEstimates.set(limelight.getId(), megatag2Estimate);
       isMegatag2[limelight.getId()] = true;
     } else if (isWithinFieldBounds(megatag1Estimate.pose())) {
-      limelightEstimates.set(
-          limelight.getId(), megatag1Estimate);
+      limelightEstimates.set(limelight.getId(), megatag1Estimate);
       isMegatag2[limelight.getId()] = false;
     } else {
       limelightEstimates.set(limelight.getId(), new PoseEstimate());
@@ -176,8 +180,7 @@ public class PhysicalVision implements VisionInterface {
   public void disabledPoseUpdate(Limelight limelight) {
     PoseEstimate megatag1PoseEstimate = getMegaTag1PoseEstimate(limelight);
 
-    limelightEstimates.set(
-        limelight.getId(), megatag1PoseEstimate);
+    limelightEstimates.set(limelight.getId(), megatag1PoseEstimate);
     isMegatag2[limelight.getId()] = false;
   }
 
