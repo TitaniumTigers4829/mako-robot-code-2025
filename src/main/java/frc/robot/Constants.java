@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Constants {
-  private static RobotType robotType = RobotType.SIM_ROBOT;
+  private static RobotType robotType = RobotType.COMP_ROBOT;
 
   public static final boolean tuningMode = false;
 

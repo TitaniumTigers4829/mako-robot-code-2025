@@ -124,7 +124,7 @@ public class PhysicalVision implements VisionInterface {
   @Override
   public double getAmbiguity(Limelight limelight) {
     // If no april tags are seen, return -1 for ambiguity
-    return limelightEstimates.length() == 0
+    return getNumberOfAprilTags(limelight) == 0
         ? -1
         : limelightEstimates
             .get(limelight.getId())
